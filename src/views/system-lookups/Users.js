@@ -24,7 +24,7 @@ import {
   CFormSelect
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilPlus, cilPencil } from '@coreui/icons'
+import { cilPlus, cilPencil, cilLockLocked } from '@coreui/icons'
 
 const userObj = JSON.parse(localStorage.getItem('user') || '{}')
 const userRole = (userObj.role || '').trim().toUpperCase()
@@ -66,6 +66,7 @@ function Users() {
     lastName: '',
     phoneNumber: '',
     role: 'USER',
+    status: 'ACTIVE',
     healthCenterId: '',
     departmentId: ''
   })
@@ -151,6 +152,7 @@ function Users() {
       lastName: '',
       phoneNumber: '',
       role: 'USER',
+      status: 'ACTIVE',
       healthCenterId: '',
       departmentId: ''
     })
@@ -168,6 +170,7 @@ function Users() {
       lastName: user.lastName || '',
       phoneNumber: user.phoneNumber || '',
       role: user.role || 'USER',
+      status: user.status || 'ACTIVE',
       healthCenterId: user.healthCenterId || '',
       departmentId: user.departmentId || ''
     })
@@ -227,7 +230,8 @@ function Users() {
     if (!formData.firstName.trim()) errors.firstName = 'First name is required'
     if (!formData.lastName.trim()) errors.lastName = 'Last name is required'
     if (!formData.phoneNumber.trim()) errors.phoneNumber = 'Phone number is required'
-    if (!formData.role) errors.role = 'Role is required'
+  if (!formData.role) errors.role = 'Role is required'
+  if (!formData.status) errors.status = 'Status is required'
   const isAdmin = formData.role === 'ADMIN'
     if (!isAdmin) {
       if (!formData.healthCenterId) errors.healthCenterId = 'Health Center is required'
@@ -251,10 +255,11 @@ function Users() {
         lastName: formData.lastName.trim(),
         phoneNumber: formData.phoneNumber.trim(),
         role: formData.role,
+        status: formData.status,
         ...(isAdmin ? {} : {
           healthCenterId: Number(formData.healthCenterId),
           departmentId: Number(formData.departmentId),
-  }),
+        }),
       }
       const response = await fetch('/api/users', {
         method: 'POST',
@@ -290,7 +295,7 @@ function Users() {
         lastName: formData.lastName.trim(),
         phoneNumber: formData.phoneNumber.trim(),
         role: formData.role,
-        status: editingUser.status
+        status: formData.status
       }
       if (!isAdmin) {
         if (formData.healthCenterId) requestBody.healthCenterId = Number(formData.healthCenterId)
@@ -403,8 +408,9 @@ function Users() {
                           variant="outline"
                           size="sm"
                           onClick={() => handlePasswordReset(user)}
+                          title="Reset Password"
                         >
-                          Reset Password
+                          <CIcon icon={cilLockLocked} />
                         </CButton>
       {/* Reset Password Modal */}
       <CModal visible={showPasswordModal} onClose={() => setShowPasswordModal(false)} size="md">
@@ -557,6 +563,21 @@ function Users() {
               ) : null}
             </div>
             <div className="mb-3">
+              <label className="form-label">Status *</label>
+              <CFormSelect
+                value={formData.status}
+                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                invalid={!!formErrors.status}
+              >
+                <option value="">Select status</option>
+                <option value="ACTIVE">ACTIVE</option>
+                <option value="INACTIVE">INACTIVE</option>
+              </CFormSelect>
+              {formErrors.status ? (
+                <div className="invalid-feedback d-block">{formErrors.status}</div>
+              ) : null}
+            </div>
+            <div className="mb-3">
               <label className="form-label">Health Center *</label>
               <CFormSelect
                 value={formData.healthCenterId}
@@ -697,6 +718,21 @@ function Users() {
               </CFormSelect>
               {formErrors.role ? (
                 <div className="invalid-feedback d-block">{formErrors.role}</div>
+              ) : null}
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Status *</label>
+              <CFormSelect
+                value={formData.status}
+                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                invalid={!!formErrors.status}
+              >
+                <option value="">Select status</option>
+                <option value="ACTIVE">ACTIVE</option>
+                <option value="INACTIVE">INACTIVE</option>
+              </CFormSelect>
+              {formErrors.status ? (
+                <div className="invalid-feedback d-block">{formErrors.status}</div>
               ) : null}
             </div>
             <div className="mb-3">
