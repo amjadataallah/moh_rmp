@@ -24,6 +24,7 @@ const Departments = React.lazy(() => import('./views/system-lookups/Departments'
 const JobTitles = React.lazy(() => import('./views/system-lookups/JobTitles'))
 const Placements = React.lazy(() => import('./views/system-lookups/Placements'))
 const Companies = React.lazy(() => import('./views/system-lookups/Companies'))
+const Users = React.lazy(() => import('./views/system-lookups/Users'))
 const Positions = React.lazy(() => import('./views/system-lookups/Positions'))
 
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
@@ -91,6 +92,7 @@ const routes = [
   { path: '/system-lookups/job-titles', name: 'Job Titles', element: JobTitles },
   { path: '/system-lookups/placements', name: 'Placements', element: Placements },
   { path: '/system-lookups/companies', name: 'Companies', element: Companies },
+  { path: '/main-operations/users', name: 'Users', element: Users },
   { path: '/system-lookups/positions', name: 'Positions', element: Positions },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },
